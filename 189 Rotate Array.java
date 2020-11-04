@@ -1,19 +1,19 @@
+// https://leetcode.com/problems/rotate-array/
+
 class Solution {
     public void rotate(int[] nums, int k) {
-        k%=nums.length;
-        if(nums.length==0 || k==0) return;
-        int c=0;
-        for(int s=0;c<nums.length;s++) {
-            int prev=nums[s];
-            int curr=s;
-            do {
-                int n=(curr+k)%nums.length;
-                int t=nums[n];
-                nums[n]=prev;
-                prev=t;
-                curr=n;
-                c++;
-            }while(curr!=s);
+        if(nums.length < 2 || k % nums.length == 0) return;
+        k %= nums.length;
+        rev(nums, 0, nums.length - 1);
+        rev(nums, 0, k - 1);
+        rev(nums, k, nums.length - 1);
+    }
+    
+    public void rev(int[] nums, int l, int r) {
+        while(l < r) {
+            int t = nums[l];
+            nums[l++] = nums[r];
+            nums[r--] = t;
         }
     }
 }
