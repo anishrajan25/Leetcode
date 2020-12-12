@@ -16,18 +16,40 @@
  *     }
  * }
  */
+
 class Solution {
-    int sum = 0;
+    int s;
     public int sumOfLeftLeaves(TreeNode root) {
-        if(root == null) return 0;
+        s = 0;
         helper(root, false);
-        return sum;
+        return s;
     }
     
-    private void helper(TreeNode r, boolean left) {
-        if(left && r.left == null && r.right == null) sum += r.val;
-        
-        if(r.left != null) helper(r.left, true);
-        if(r.right != null) helper(r.right, false);
+    private void helper(TreeNode r, boolean l) {
+        if(r == null) return;
+        if(r.left == null && r.right == null) {
+            if(l) s += r.val;
+            return;
+        }
+        helper(r.left, true);
+        helper(r.right, false);
     }
+    
 }
+
+
+// class Solution {
+//     int sum = 0;
+//     public int sumOfLeftLeaves(TreeNode root) {
+//         if(root == null) return 0;
+//         helper(root, false);
+//         return sum;
+//     }
+    
+//     private void helper(TreeNode r, boolean left) {
+//         if(left && r.left == null && r.right == null) sum += r.val;
+        
+//         if(r.left != null) helper(r.left, true);
+//         if(r.right != null) helper(r.right, false);
+//     }
+// }
