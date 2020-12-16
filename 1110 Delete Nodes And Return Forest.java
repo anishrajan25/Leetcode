@@ -16,66 +16,92 @@
  * }
  */
 class Solution {
-    HashMap<Integer, Boolean> del;
-    List<TreeNode> ans;
     public List<TreeNode> delNodes(TreeNode root, int[] to_delete) {
-        del = new HashMap<Integer, Boolean>();
-        ans = new ArrayList<>();
-        for(int i = 0; i < to_delete.length; i++)
-            del.put(to_delete[i], true);
-        if(!del.containsKey(root.val))  ans.add(root);
-        trav(root, null);
-        
-        return ans;
+        HashSet<Integer> hs = new HashSet();
+        for(int i: to_delete) hs.add(i);
+        List<TreeNode> res = new ArrayList();
+        if(root != null && !hs.contains(root.val)) res.add(root); 
+        helper(root, hs, res);
+        return res;
     }
     
-    public void trav(TreeNode root, TreeNode parent){
-        if(root == null)    return ;
-        trav(root.left, root);
-        trav(root.right, root);
+    private TreeNode helper(TreeNode root, HashSet<Integer> hs, List<TreeNode> res) {
+        if(root == null) return null;
         
-        if(del.containsKey(root.val))   {
-            if(parent!=null && parent.left == root) parent.left = null;
-            if(parent!=null && parent.right == root)parent.right = null;
-            if(root.left != null)   ans.add(root.left);
-            if(root.right != null)   ans.add(root.right);
+        root.left = helper(root.left, hs, res);
+        root.right = helper(root.right, hs, res);
+        if(hs.contains(root.val)) {
+            if(root.left != null) res.add(root.left);
+            if(root.right != null) res.add(root.right);
+            root = null;
         }
+        
+        return root;
     }
-    
 }
 
 
-// ANOTHER SOLUTION
-class Solution {
-    public List<TreeNode> delNodes(TreeNode root, int[] to_delete) {
-        List<TreeNode> result = new ArrayList<>();
-        Set<Integer> set = new HashSet<>();
-        for (int d : to_delete) {
-            set.add(d);
-        }
-        delete(result, set, root, false);
-        return result;
-    }
-    
-    public void delete(List<TreeNode> result, Set<Integer> set, TreeNode curr, boolean added) {
-        if (curr == null) return;
-        if (!set.contains(curr.val) && !added) {
-            result.add(curr);
-            added = true;
-        }
-
-        if (curr.left != null && set.contains(curr.left.val)) {
-            delete(result, set, curr.left, false);
-            curr.left = null;
-        } else {
-            delete(result, set, curr.left, added);
-        }
+// class Solution {
+//     HashMap<Integer, Boolean> del;
+//     List<TreeNode> ans;
+//     public List<TreeNode> delNodes(TreeNode root, int[] to_delete) {
+//         del = new HashMap<Integer, Boolean>();
+//         ans = new ArrayList<>();
+//         for(int i = 0; i < to_delete.length; i++)
+//             del.put(to_delete[i], true);
+//         if(!del.containsKey(root.val))  ans.add(root);
+//         trav(root, null);
         
-        if (curr.right != null && set.contains(curr.right.val)) {
-            delete(result, set, curr.right, false);
-            curr.right = null;
-        } else {
-            delete(result, set, curr.right, added);
-        }
-    }
-}
+//         return ans;
+//     }
+    
+//     public void trav(TreeNode root, TreeNode parent){
+//         if(root == null)    return ;
+//         trav(root.left, root);
+//         trav(root.right, root);
+        
+//         if(del.containsKey(root.val))   {
+//             if(parent!=null && parent.left == root) parent.left = null;
+//             if(parent!=null && parent.right == root)parent.right = null;
+//             if(root.left != null)   ans.add(root.left);
+//             if(root.right != null)   ans.add(root.right);
+//         }
+//     }
+    
+// }
+
+
+// // ANOTHER SOLUTION
+// class Solution {
+//     public List<TreeNode> delNodes(TreeNode root, int[] to_delete) {
+//         List<TreeNode> result = new ArrayList<>();
+//         Set<Integer> set = new HashSet<>();
+//         for (int d : to_delete) {
+//             set.add(d);
+//         }
+//         delete(result, set, root, false);
+//         return result;
+//     }
+    
+//     public void delete(List<TreeNode> result, Set<Integer> set, TreeNode curr, boolean added) {
+//         if (curr == null) return;
+//         if (!set.contains(curr.val) && !added) {
+//             result.add(curr);
+//             added = true;
+//         }
+
+//         if (curr.left != null && set.contains(curr.left.val)) {
+//             delete(result, set, curr.left, false);
+//             curr.left = null;
+//         } else {
+//             delete(result, set, curr.left, added);
+//         }
+        
+//         if (curr.right != null && set.contains(curr.right.val)) {
+//             delete(result, set, curr.right, false);
+//             curr.right = null;
+//         } else {
+//             delete(result, set, curr.right, added);
+//         }
+//     }
+// }
